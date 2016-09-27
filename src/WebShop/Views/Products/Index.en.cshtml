@@ -1,0 +1,78 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@model IEnumerable<WebShop.Models.ProductViewModel>
+
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h2>Products</h2>
+
+<p>
+    <a asp-action="Create">Create New Product</a>
+</p>
+<div class="col-lg-12 div-all-products">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-2 product-div">
+            <img src="~/images/@Html.DisplayFor(modelItem => item.ImageName)" alt="ASP.NET" class="img-responsive" />
+            <div class="productName-class">
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </div>
+            <div>
+                @Html.DisplayFor(modelItem => item.Price)
+            </div>
+            <div>
+                <input type="submit" value="AddtoCart" class="btn btn-default" />
+                <a asp-action="AddToCart" asp-route-id="@item.ProductId" asp-controller="ShoppingCarts">Buy</a> 
+            </div>
+            <div class="CRUD-links-prod">
+                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+            </div>
+        </div>
+    }
+</div>
+<div></div>
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDescription)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+             <div class="col-md-2">
+                    <td>
+                        <img src="~/images/@Html.DisplayFor(modelItem => item.ImageName)" alt="ASP.NET" class="img-responsive" />
+                        @Html.DisplayFor(modelItem => item.ProductName)
+
+                    </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductDescription)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+            </td>
+            </div>
+        </tr>
+}
+    </tbody>
+</table>*@

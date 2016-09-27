@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3273CEB8-157E-468F-8E20-2C6EECF409ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1ACC9AB0-EA3A-4827-BB56-073E4E2E04A2}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WebShop", "src\WebShop\WebShop.xproj", "{4DE42BE3-77BF-4E0E-A77E-F81B5742FEF3}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WebShopTest", "src\WebShopTest\WebShopTest.xproj", "{DF86B2D9-1805-4DA5-8EF7-A20D8401F791}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DE42BE3-77BF-4E0E-A77E-F81B5742FEF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE42BE3-77BF-4E0E-A77E-F81B5742FEF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE42BE3-77BF-4E0E-A77E-F81B5742FEF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE42BE3-77BF-4E0E-A77E-F81B5742FEF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF86B2D9-1805-4DA5-8EF7-A20D8401F791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF86B2D9-1805-4DA5-8EF7-A20D8401F791}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF86B2D9-1805-4DA5-8EF7-A20D8401F791}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF86B2D9-1805-4DA5-8EF7-A20D8401F791}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4DE42BE3-77BF-4E0E-A77E-F81B5742FEF3} = {3273CEB8-157E-468F-8E20-2C6EECF409ED}
+		{DF86B2D9-1805-4DA5-8EF7-A20D8401F791} = {3273CEB8-157E-468F-8E20-2C6EECF409ED}
+	EndGlobalSection
+EndGlobal

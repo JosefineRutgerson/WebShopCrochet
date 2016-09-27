@@ -1,0 +1,59 @@
+@using System.Collections.Generic;
+
+
+@*@model List<Cart>*@
+@model WebShop.Models.ShoppingCartViewModel
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<h2>Shopping Cart</h2>
+
+
+    <h4>Your products</h4>
+    <hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(modelItem => Model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => Model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.Quantity)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CartItems)
+        {
+         <tr>
+            <td>
+                @Html.DisplayFor(ModelItem => item.Product.Translations.SingleOrDefault().ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(ModelItem => item.Product.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+             <td>
+                 <div class="col-md-1 cart-image">
+                     <img src="~/images/@Html.DisplayFor(modelItem => item.Product.ImageName)" alt="ASP.NET" class="img-responsive" />
+                 </div>
+             </td>
+        </tr>
+        }
+    </tbody>
+    </Table>
+<div>
+     <a asp-action="Index">Back to List</a>
+</div>
+
+
+
+        
+
