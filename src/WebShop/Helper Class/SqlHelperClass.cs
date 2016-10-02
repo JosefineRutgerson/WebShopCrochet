@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -79,17 +80,15 @@ namespace WebShop.Helper_Class
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionstring))
                 {
                     SqlCommand cmd = new SqlCommand("INSERT INTO Products (Price,ProductCategoryId,ImageName) VALUES (@Price, @ProductCategoryId, @ImageName) SET @ID = SCOPE_IDENTITY()");
                     cmd.CommandType = CommandType.Text;
-                    cmd.Connection = connection;
                     cmd.Parameters.AddWithValue("@Price", productData.Price);
                     cmd.Parameters.AddWithValue("@ProductCategoryId", productData.ProductCategoryId);
                     cmd.Parameters.AddWithValue("@ImageName", productData.ImageName);
                     cmd.Parameters.Add("@ID", SqlDbType.Int, 4).Direction = ParameterDirection.Output;
-                    connection.Open();
-                    cmd.ExecuteNonQuery();
+                    _context.Database.ExecuteSqlCommand(cmd, null);
+                    
 
                     if (!InsertLanguage(cmd.Parameters["@ID"].Value.ToString(),"en", productData.ProductName, productData.ProductDescription))
                     {

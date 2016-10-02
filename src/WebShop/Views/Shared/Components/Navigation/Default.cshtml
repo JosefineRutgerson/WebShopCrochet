@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNetCore.Mvc.ViewComponents
+@using WebShop.ViewComponents
+
+@model NavigationViewComponent.ViewModel
+
+<nav>
+    <ul>
+        @foreach (var navigationItem in Model.NavigationItems)
+        {
+            <li>
+                <a href="@navigationItem.TargetUrl">@navigationItem.Name</a>
+            </li>
+        }
+    </ul>
+</nav>

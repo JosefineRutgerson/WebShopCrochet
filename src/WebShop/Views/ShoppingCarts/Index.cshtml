@@ -13,7 +13,7 @@
 
     <h4>Your products</h4>
     <hr />
-<table class="table">
+<table class="table cart-table">
     <thead>
         <tr>
             <th>
@@ -32,7 +32,9 @@
         {
          <tr>
             <td>
-                @Html.DisplayFor(ModelItem => item.Product.Translations.SingleOrDefault().ProductName)
+                <p>
+                    @Html.DisplayFor(ModelItem => item.Product.Translations.SingleOrDefault().ProductName)
+                </p>
             </td>
             <td>
                 @Html.DisplayFor(ModelItem => item.Product.Price)
@@ -41,14 +43,27 @@
                 @Html.DisplayFor(modelItem => item.Count)
             </td>
              <td>
-                 <div class="col-md-1 cart-image">
+                 <a asp-action="AddToCart" asp-route-id="@item.ProductId" asp-controller="ShoppingCarts" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></a>
+                 <a asp-action="RemoveFromCart" asp-route-id="@item.Product.ProductId" asp-controller="ShoppingCarts" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></a>
+             </td>
+             <td>
+                 <div class="cart-image">
                      <img src="~/images/@Html.DisplayFor(modelItem => item.Product.ImageName)" alt="ASP.NET" class="img-responsive" />
                  </div>
-             </td>
+             </td>             
         </tr>
         }
     </tbody>
     </Table>
+    <h2>Total price</h2>
+<div class="cart-total">
+    <p>
+        @Html.DisplayFor(modelitem => Model.CartTotal)
+    </p>
+    <div>
+        <a asp-action="Checkout" asp-controller="ShoppingCarts" class="btn btn-default">Checkout</a> 
+    </div>       
+</div>
 <div>
      <a asp-action="Index">Back to List</a>
 </div>

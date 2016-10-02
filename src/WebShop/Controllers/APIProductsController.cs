@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Models;
 using WebShop.Helper_Class;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,19 +14,19 @@ namespace WebShop.Controllers
     [Route("api/[controller]")]
     public class APIProductsController : Controller
     {
-        private SqlHelperClass sqlHelperClas;
+        private SqlHelperClass sqlHelper;
         WebShopRepository _context;
         public APIProductsController(WebShopRepository context)
         {
             WebShopRepository = context;
-            sqlHelperClas = new SqlHelperClass(WebShopRepository);
+            sqlHelper = new SqlHelperClass(WebShopRepository);
         }
         public WebShopRepository WebShopRepository { get; set; }
 
         [HttpGet]
         public IEnumerable<ProductViewModel> GetAll()
         {
-            var productList = sqlHelperClas.PopulateProductViewModel();
+            var productList = sqlHelper.PopulateProductViewModel();
 
             return productList.ToList();
         }
@@ -33,13 +34,89 @@ namespace WebShop.Controllers
         [HttpGet("{id}", Name = "GetProduct")]
         public IActionResult GetById(int id)
         {
-            var item = WebShopRepository.Products.Where(pro => pro.ProductId == id);
+            var productList = sqlHelper.PopulateProductViewModel().ToList();
+            ProductViewModel product = new ProductViewModel();
+            if (productList == null)
+            {
+                return NotFound();
+            
+            }
+
+            //var item = WebShopRepository.Products.Where(pro => pro.ProductId == id);
+            foreach (var item in productList)
+            {
+                if (item.ProductId == id)
+                {
+                    product = item;
+                    
+                }
+                    
+            }
+                return new ObjectResult(product);
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] AllProductData item)
+        {
             if (item == null)
+            {
+                return BadRequest();
+            }
+
+            sqlHelper.InsertProduct(item);
+            return CreatedAtRoute("Getproduct", new { id = item.ProductId }, item);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int? id, [FromBody] AllProductData item)
+        {
+            if (item == null || item.ProductId != id)
+            {
+                return BadRequest();
+            }
+
+            item.ProductId = id ?? default(int);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    sqlHelper.UpdateProduct(item);
+                    //_context.Update(productData);
+                    //await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProductExists(item.ProductId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+                return new NoContentResult();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var chosenPro = WebShopRepository.Products.Where(pro => pro.ProductId == id);
+            if (chosenPro == null)
             {
                 return NotFound();
             }
-            return new ObjectResult(item);
+
+            sqlHelper.DeleteProduct(id);
+            return new NoContentResult();
         }
+
+        private bool ProductExists(int id)
+        {
+            return _context.Products.Any(e => e.ProductId == id);
+        }
+
     }
 
 }

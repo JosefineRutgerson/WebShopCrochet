@@ -8,13 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using WebShop.Models;
 using Microsoft.Extensions.Localization;
 using WebShop.Helper_Class;
+using WebShop.Services;
+using System.Globalization;
 
 namespace WebShop.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly IStringLocalizer<ProductsController> _localizer;
-        
+        private FixerIo exchangeRate;
         private readonly WebShopRepository _context;
         private SqlHelperClass sqlHelper;
         private ProductTranslationsController productTranslationcontroller;
@@ -38,12 +40,21 @@ namespace WebShop.Controllers
 
         
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(FixerIo rate)
         {
-            //var webShopRepository = _context.Products.Include(p => p.ProductCategory);
-            var productList = sqlHelper.PopulateProductViewModel();
-            return View(await productList.ToListAsync());
+            exchangeRate = rate;
+            var productList = sqlHelper.PopulateProductViewModel().ToList();
 
+            if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName != "sv")
+            {
+                for (int i = 0; i < productList.Count(); i++)
+                {
+                    productList[i].Price = exchangeRate.ConvertPrice("SEK", "USD", productList[i].Price);
+                }               
+            }
+
+            //productList.ToAsyncEnumerable();
+            return View(await productList.ToAsyncEnumerable().ToList());
 
         }
 
@@ -87,6 +98,12 @@ namespace WebShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult>Create([Bind("ProductId, ProductName, ProductNameSV, ProductDescription, ProductDescriptionSV, Price, ProductCategoryId, ImageName")] AllProductData productData)
         {
+
+            Product prool = new Product();
+            prool.Price = productData.Price;
+            _context.Add(prool);
+            _context.SaveChanges();
+
             if (ModelState.IsValid)
             {
                 sqlHelper.InsertProduct(productData);

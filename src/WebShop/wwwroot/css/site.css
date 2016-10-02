@@ -71,14 +71,34 @@ textarea {
     padding-right: 10px;
 }
 
+.shoppingCart-class{
+    margin-top: 5px;
+    position: absolute;
+    display: inline-block;
+    left: 539px;
+}
+
+.btn-default {
+    background-color: aqua;
+}
+
 /*product Page*/
 .div-all-products {
     margin-bottom:100px;
     margin-top:30px;
 }
 
+.col-md-3{
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
 .product-div{
     margin-bottom:50px;
+}
+
+.product-div > div{
+    margin:5px;
 }
 
 .productName-class{
@@ -90,6 +110,43 @@ textarea {
     margin-top:5px;
 }
 
+/*Shopping Cart page*/
+
+.cart-total{
+    display:inline-block;
+    
+}
+
+.cart-total > div{
+    float:left;
+}
+
+.cart-total > p{
+font-weight:bold;
+font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+font-size:40px;
+}
+
+.cart-total > div > a{
+    display:inline-block;
+    float:left;
+    padding:16px;
+    font-size:20px;
+    margin-bottom:30px;
+}
+
+.cart-table{
+
+}
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    font-size:20px;
+}
+
+.cart-image{
+    width:80px;
+    height:80px;
+}
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {

@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using WebShop.Interfaces;
+using WebShop.Models;
 using WebShop.ViewModels;
 using Xunit;
 
@@ -17,17 +18,19 @@ namespace WebShop.Controllers
         }
     }
     public class HomeControllerTest
-    {        
-        public HomeControllerTest()
-        {
+    {
+        private readonly WebShopRepository _context;
 
+        public HomeControllerTest(WebShopRepository context)
+        {
+            _context = context;
         }
         [Fact]
         public void HomeControllerContactTest()
         {
             // Arrange
             var datetime = new StaticDateTime();
-            var controller = new HomeController(datetime);
+            var controller = new HomeController(datetime, _context);
 
             // Act
             var result = controller.Contact();

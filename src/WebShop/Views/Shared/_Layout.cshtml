@@ -46,7 +46,8 @@
                     @using (Html.BeginForm("SearchForProduct", "Products"))
                     {
                         @Html.TextBox("SearchtextBox", null, new { @class = "search-box" })
-                        <input type ="submit" value ="Search" class="search-button"  />
+                        <input type ="submit" value ="Search" class="btn btn-default search-button"  />
+                        @*<span class="glyphicon glyphicon-search" aria-hidden="true"></span>*@
                     }
                 </div>
             </div>
@@ -79,7 +80,9 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
-
+    <div class="navbar-fixed-top shoppingCart-class">
+        @await Component.InvokeAsync("ShoppingCart")
+    </div>
     @RenderSection("scripts", required: false)
 </body>
 </html>

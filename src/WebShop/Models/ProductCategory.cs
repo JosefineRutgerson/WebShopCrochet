@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace WebShop.Models
         [Display(Name ="Category Name")]
         public string ProductCategoryName { get; set; }
 
+        [JsonIgnore]
         public ICollection<Product> Products { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.ViewComponents
+@using WebShop.ViewComponents
 
 @model IEnumerable<WebShop.Models.ProductViewModel>
 
@@ -16,7 +18,7 @@
 <div class="col-lg-12 div-all-products">
     @foreach (var item in Model)
     {
-        <div class="col-md-2 product-div">
+        <div class="col-md-3 product-div">
             <img src="~/images/@Html.DisplayFor(modelItem => item.ImageName)" alt="ASP.NET" class="img-responsive" />
             <div class="productName-class">
                 @Html.DisplayFor(modelItem => item.ProductName)
@@ -25,18 +27,19 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </div>
             <div>
-                <input type="submit" value="AddtoCart" class="btn btn-default" />
-                <a asp-action="AddToCart" asp-route-id="@item.ProductId" asp-controller="ShoppingCarts">Buy</a> 
+                <a asp-action="AddToCart" asp-route-id="@item.ProductId" asp-controller="ShoppingCarts" class="btn btn-default">Buy</a> 
             </div>
-            <div class="CRUD-links-prod">
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+            <div class="CRUD-links-prod btn-group">
+                <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span></a>
+                <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>
             </div>
         </div>
     }
 </div>
-<div></div>
+<div>
+    @await Component.InvokeAsync("Navigation")
+</div>
 @*<table class="table">
     <thead>
         <tr>

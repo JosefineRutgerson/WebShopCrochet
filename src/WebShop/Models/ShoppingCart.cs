@@ -68,7 +68,7 @@ namespace WebShop.Models
             // Get the cart
             var cartItem = _context.Carts.Single(
                 cart => cart.CartId == ShoppingCartId
-                && cart.Id == id);
+                && cart.Product.ProductId == id);
 
             int itemCount = 0;
 
@@ -125,7 +125,7 @@ namespace WebShop.Models
             decimal? total = (from cartItems in _context.Carts
                               where cartItems.CartId == ShoppingCartId
                               select (int?)cartItems.Count *
-                              cartItems.ProductId).Sum();  // Fixa detta!
+                              cartItems.Product.Price).Sum();  
 
             return total ?? decimal.Zero;
         }

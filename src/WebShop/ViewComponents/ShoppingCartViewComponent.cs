@@ -10,11 +10,26 @@ namespace WebShop.ViewComponents
     public class ShoppingCartViewComponent : ViewComponent
     {
         private readonly WebShopRepository _context;
+        Product productmodel = new Product();
 
         public ShoppingCartViewComponent( WebShopRepository context)
         {
             _context = context;
         }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            ShoppingCart _shoppingCart = ShoppingCart.GetCart(this.HttpContext, _context);
+            int cartCount = _shoppingCart.GetCount();
+            ViewData["CartCount"] = cartCount;
+            return View();
+
+        }
+
+        //public int CartQuantity()
+        //{
+
+        //}
 
         //public async Task<IViewComponentResult> InvokeAsync(int id)
         //{
