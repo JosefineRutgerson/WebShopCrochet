@@ -33,7 +33,7 @@ namespace WebShop.Controllers
 
         public IActionResult About(int id, string name)
         {
-            ViewData["Message"] = id.ToString() + " " + name;// + _datetime.Now;
+            ViewData["Message"] = id.ToString() + " " + name + _datetime.Now;
 
             return View();
         }

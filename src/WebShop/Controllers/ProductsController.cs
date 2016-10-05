@@ -96,27 +96,65 @@ namespace WebShop.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult>Create([Bind("ProductId, ProductName, ProductNameSV, ProductDescription, ProductDescriptionSV, Price, ProductCategoryId, ImageName")] AllProductData productData)
+        public async Task<IActionResult> Create([Bind("ProductId, ProductName, ProductNameSV, ProductDescription, ProductDescriptionSV, Language, LanguageSV, Price, ProductCategoryId, ImageName")] AllProductData productData)
         {
 
-            Product prool = new Product();
-            prool.Price = productData.Price;
-            _context.Add(prool);
-            _context.SaveChanges();
 
-            if (ModelState.IsValid)
-            {
-                sqlHelper.InsertProduct(productData);
-                return RedirectToAction("Index");
-                //_context.Add(product);
-                //await _context.SaveChangesAsync();
-                //return RedirectToAction("Create", "ProductTranslations", new { id = product.ProductId });
+            List<ProductTranslation> prodTranslat = new List<ProductTranslation>();
+            ProductTranslation pT = new ProductTranslation();
+            pT.Language = productData.Language;
+            pT.ProductName = productData.ProductName;
+            pT.ProductDescription = productData.ProductDescription;
+            prodTranslat.Add(pT);
+            ProductTranslation pT2 = new ProductTranslation();
+            pT2.Language = productData.LanguageSV;
+            pT2.ProductName = productData.ProductNameSV;
+            pT2.ProductDescription = productData.ProductDescriptionSV;
+            prodTranslat.Add(pT2);
 
-            }
-            else
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors);
-            }
+
+            //prool.ImageName = productData.ImageName;
+            //prool.Price = productData.Price;
+            //prool.ProductCategory = productData.ProductCategory;
+            //prool.ProductCategoryId = productData.ProductCategoryId;
+            //_context.Add(prool);
+
+            _context.Products.Add(new Product {
+                Price = productData.Price,
+                ImageName = productData.ImageName,
+                ProductCategory = productData.ProductCategory,
+                ProductCategoryId = productData.ProductCategoryId,
+                Translations = prodTranslat
+                
+                
+            });
+
+            //_context.ProductTranslations.Add(new ProductTranslation { Language = productData.Language, ProductName = productData.ProductName,
+            //ProductDescription = productData.ProductDescription });
+            //_context.ProductTranslations.Add(new ProductTranslation
+            //{
+            //    Language = productData.LanguageSV,
+            //    ProductName = productData.ProductNameSV,
+            //    ProductDescription = productData.ProductDescriptionSV
+            //});
+           
+               //prool.Translations = protranslat;
+            await _context.SaveChangesAsync();
+            
+
+            //if (ModelState.IsValid)
+            //{
+            //    sqlHelper.InsertProduct(productData);
+            //    return RedirectToAction("Index");
+            //    //_context.Add(product);
+            //    //await _context.SaveChangesAsync();
+            //    //return RedirectToAction("Create", "ProductTranslations", new { id = product.ProductId });
+
+            //}
+            //else
+            //{
+            //    var errors = ModelState.Values.SelectMany(v => v.Errors);
+            //}
             ViewData["ProductCategoryId"] = new SelectList(_context.ProductCategories, "ProductCategoryId", "ProductCategoryName", productData.ProductCategoryId);
             return View(productData);
         }
@@ -144,7 +182,7 @@ namespace WebShop.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("ProductId, ProductName, ProductNameSV, ProductDescription, ProductDescriptionSV, Price, ProductCategoryId, ImageName")] AllProductData productData, int? id)
+        public async Task<IActionResult> Edit([Bind("ProductId, ProductName, ProductNameSV, ProductDescription, ProductDescriptionSV, Language, LanguageSV, Price, ProductCategoryId, ImageName")] AllProductData productData, int? id)
         {
             if (id == null)
             {
@@ -156,9 +194,31 @@ namespace WebShop.Controllers
             {
                 try
                 {
-                    sqlHelper.UpdateProduct(productData);
-                    //_context.Update(productData);
-                    //await _context.SaveChangesAsync();
+                    List<ProductTranslation> prodTranslation = new List<ProductTranslation>();
+                    ProductTranslation pT3 = new ProductTranslation();
+                    pT3.Language = productData.Language;
+                    pT3.ProductName = productData.ProductName;
+                    pT3.ProductDescription = productData.ProductDescription;
+                    pT3.ProductId = productData.ProductId;
+                    prodTranslation.Add(pT3);
+                    ProductTranslation pT4 = new ProductTranslation();
+                    pT4.Language = productData.LanguageSV;
+                    pT4.ProductName = productData.ProductNameSV;
+                    pT4.ProductDescription = productData.ProductDescriptionSV;
+                    pT4.ProductId = productData.ProductId;
+                    prodTranslation.Add(pT4);
+
+                    Product productUpdate = new Product();
+                    productUpdate.Translations = prodTranslation;
+                    productUpdate.ImageName = productData.ImageName;
+                    productUpdate.Price = productData.Price;
+                    productUpdate.ProductId = productData.ProductId;
+                    productUpdate.ProductCategoryId = productData.ProductCategoryId;
+
+                    
+                    _context.Update(productUpdate);
+                    await _context.SaveChangesAsync();
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -200,7 +260,7 @@ namespace WebShop.Controllers
 
 
         // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -227,10 +287,10 @@ namespace WebShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            sqlHelper.DeleteProduct(id);
-            //var product = await _context.Products.SingleOrDefaultAsync(m => m.ProductId == id);
-            //_context.Products.Remove(product);
-            //await _context.SaveChangesAsync();
+            //sqlHelper.DeleteProduct(id);
+            var product = await _context.Products.SingleOrDefaultAsync(m => m.ProductId == id);
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

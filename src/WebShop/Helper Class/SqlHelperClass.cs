@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -46,13 +45,14 @@ namespace WebShop.Helper_Class
             AllProductData productData;
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on
-                        new { first = id, second = "en"}
+                        new { first = id, second = "en" }
                         equals new { first = pt.ProductId, second = pt.Language }
                         select new AllProductData
                         {
                             ProductId = p.ProductId,
                             ProductName = pt.ProductName,
                             ProductDescription = pt.ProductDescription,
+                            Language = pt.Language,
                             ProductCategoryId = p.ProductCategoryId,
                             ProductCategory = p.ProductCategory,
                             Price = p.Price,
@@ -67,11 +67,13 @@ namespace WebShop.Helper_Class
                     {
                         ProductNameSV = pt.ProductName,
                         ProductDescriptionSV = pt.ProductDescription,
+                        LanguageSV = pt.Language 
                         
                     };
 
             productData.ProductNameSV = query.FirstOrDefault().ProductNameSV;
             productData.ProductDescriptionSV = query.FirstOrDefault().ProductDescriptionSV;
+            productData.LanguageSV = query.FirstOrDefault().LanguageSV;
 
             return productData;
         }
@@ -80,15 +82,17 @@ namespace WebShop.Helper_Class
         {
             try
             {
+                using (SqlConnection connection = new SqlConnection(connectionstring))
                 {
                     SqlCommand cmd = new SqlCommand("INSERT INTO Products (Price,ProductCategoryId,ImageName) VALUES (@Price, @ProductCategoryId, @ImageName) SET @ID = SCOPE_IDENTITY()");
                     cmd.CommandType = CommandType.Text;
+                    cmd.Connection = connection;
                     cmd.Parameters.AddWithValue("@Price", productData.Price);
                     cmd.Parameters.AddWithValue("@ProductCategoryId", productData.ProductCategoryId);
                     cmd.Parameters.AddWithValue("@ImageName", productData.ImageName);
                     cmd.Parameters.Add("@ID", SqlDbType.Int, 4).Direction = ParameterDirection.Output;
-                    _context.Database.ExecuteSqlCommand(cmd, null);
-                    
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
 
                     if (!InsertLanguage(cmd.Parameters["@ID"].Value.ToString(),"en", productData.ProductName, productData.ProductDescription))
                     {
